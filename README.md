@@ -1,7 +1,7 @@
-#Proyecto de API REST con MongoDB, Express.js y Next.js
+# Proyecto de API REST con MongoDB, Express.js y Next.js
 Este proyecto consiste en una API REST que utiliza MongoDB como base de datos, Express.js como servidor y Next.js como framework de frontend.
 
-##Creación del proyecto
+## Creación del proyecto
 Para crear el proyecto se han seguido los siguientes pasos:
 
 1. Crea una carpeta para el proyecto completo y entra en ella:
