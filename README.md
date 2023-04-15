@@ -27,22 +27,8 @@ npm init -y
 ```
 npm install express
 ```
-6. Crea un archivo index.js en la carpeta del backend con el siguiente contenido:
-```
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 3000;
+6. Crea un archivo index.js en la carpeta del backend.
 
-app.use(express.json());
-
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hola desde el backend' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
-```
 7. En la raíz del proyecto, crea un archivo Dockerfile en la carpeta front con el siguiente contenido:
 ```
 # front/Dockerfile
@@ -121,3 +107,16 @@ Ahora, puedes utilizar la variable db para interactuar con tu base de datos Mong
 npm install axios
 ```
 14. Debes crear la carpeta api dentro de la carpeta pages de tu proyecto Next.js. Luego, dentro de la carpeta api, debes crear un archivo con el nombre de la ruta que quieres crear, en este caso items.js. En ese archivo items.js debes definir las rutas y las funciones correspondientes para manejar las solicitudes HTTP GET, POST, PUT y DELETE. Puedes usar la librería axios para realizar las solicitudes HTTP desde el frontend. 
+15. Para iniciar la ejecucion:
+-En el back:
+```
+npm start
+```
+-En el front:
+```
+nom run dev
+```
+-En la raiz:
+```
+docker-compose up
+```
