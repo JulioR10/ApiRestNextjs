@@ -4,43 +4,120 @@ Este proyecto consiste en una API REST que utiliza MongoDB como base de datos, E
 ##Creación del proyecto
 Para crear el proyecto se han seguido los siguientes pasos:
 
-1. Inicializar el proyecto con ```npm init -y.```
+1. Crea una carpeta para el proyecto completo y entra en ella:
+```
+mkdir mi-proyecto
+cd mi-proyecto
+```
+2. Crea dos carpetas, una para el frontend y otra para el backend:
+```
+mkdir front
+mkdir back
+```
+3. Inicializa un proyecto Next.js en la carpeta front:
+```
+npx create-next-app front
+```
+4. Entra en la carpeta del backend y crea un archivo package.json con el siguiente contenido:
+```
+cd back
+npm init -y
+```
+5. Instala las dependencias necesarias en el backend (Express):
+```
+npm install express
+```
+6. Crea un archivo index.js en la carpeta del backend con el siguiente contenido:
+```
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-2. Instalar las dependencias necesarias:
-```npm install express mongodb axios```
-express se usará para crear el backend, mongodb para conectarnos a la base de datos y axios para hacer peticiones HTTP desde el frontend.
+app.use(express.json());
 
-3. Crear una carpeta llamada back para el backend y otra llamada front para el frontend.
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hola desde el backend' });
+});
 
-Dentro de la carpeta back, crear un archivo index.js que contenga el código del servidor Express y se conecte a la base de datos.
-`#ffffff`
-Nota: debes reemplazar <usuario>, <contraseña>, <cluster>, <basededatos> y <colección> con los valores correspondientes de tu cuenta de MongoDB.
-`#000000`
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
+```
+7. En la raíz del proyecto, crea un archivo Dockerfile en la carpeta front con el siguiente contenido:
+```
+# front/Dockerfile
+FROM node:alpine
 
-4. Crear el servidor backend con Express:
-Luego, crearemos un servidor backend utilizando Express. Para hacerlo, podemos crear un archivo llamado index.js en la carpeta back. En este archivo, importaremos Express y estableceremos el servidor. También configuraremos el servidor para escuchar en el puerto 5000. A continuación, conectaremos el servidor a una base de datos MongoDB utilizando la biblioteca de controladores de MongoDB.
-Este código crea una instancia de Express y establece la conexión a la base de datos MongoDB. Luego, se definen las rutas para obtener, agregar, actualizar y eliminar elementos de la base de datos. Finalmente, el servidor se establece para escuchar en el puerto 5000.
+WORKDIR /app
 
-Para instalar las dependencias necesarias, podemos ejecutar el siguiente comando en la terminal dentro de la carpeta back:
-```npm install express mongodb```
+COPY package.json ./
+COPY package-lock.json ./
 
-5. Crear la aplicación frontend con Next.js:
-Para crear la aplicación frontend, utilizaremos Next.js. Next.js es un marco de trabajo de React que nos permite construir aplicaciones de React del lado del servidor. Next.js incluye una serie de características que nos ayudarán a construir la aplicación de manera más fácil y rápida.
+RUN npm ci
 
-Para crear la aplicación, podemos ejecutar el siguiente comando en la terminal dentro de la carpeta raíz del proyecto:
-```npx create-next-app front```
-Este comando creará una nueva aplicación Next.js en una carpeta llamada front. Podemos navegar a esta carpeta y ejecutar el siguiente comando para iniciar el servidor de desarrollo:
-```npm run dev```
-Esto iniciará el servidor de desarrollo y nos permitirá comenzar a construir la aplicación.
+COPY . .
 
-6. Crear la interfaz de usuario de la aplicación:
+RUN npm run build
 
-7. Creamos el archivo docker-compose.yml en la raíz del proyecto para definir la configuración de los servicios de Docker que vamos a utilizar. En este archivo, definimos tres servicios: frontend, backend y mongo.
+CMD ["npm", "start"]
+```
+8. Crea un archivo Dockerfile en la carpeta back con el siguiente contenido:
+```
+# back/Dockerfile
+FROM node:alpine
 
-8. En el servicio frontend especificamos la ubicación del archivo Dockerfile en la carpeta front, los puertos que se utilizarán y que este servicio depende del servicio backend.
+WORKDIR /app
 
-9. En el servicio backend, especificamos la ubicación del archivo Dockerfile en la carpeta back, los puertos que se utilizarán, la variable de entorno para la URL de la base de datos MongoDB y que este servicio depende del servicio mongo.
+COPY package.json ./
+COPY package-lock.json ./
 
-10. Finalmente, instalamos las dependencias necesarias en el proyecto con el comando npm install mongodb y npm install axios.
+RUN npm ci
 
-¡Listo! Con estos pasos hemos creado un proyecto básico de API REST con Node.js, Express, MongoDB y Docker Compose. Este proyecto puede ser utilizado como punto de partida para desarrollar una aplicación más compleja.
+COPY . .
+
+CMD ["node", "index.js"]
+```
+9. En la raíz del proyecto, crea un archivo docker-compose.yml y agrega el servicio de MongoDB a tu archivo docker-compose.yml:
+```
+version: "3.9"
+
+services:
+  frontend:
+    build: ./front
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./back
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/mydb
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+```
+10. Desde la raíz del proyecto, ejecuta docker-compose up para construir y ejecutar los contenedores:
+```
+docker-compose up
+```
+11. Instala el paquete mongodb en tu proyecto de backend:
+```
+cd back
+npm install mongodb
+```
+12. En tu archivo index.js en el backend, importa y conecta a la base de datos utilizando mongodb.MongoClient. 
+Ahora, puedes utilizar la variable db para interactuar con tu base de datos MongoDB. Por ejemplo, puedes crear un nuevo endpoint para guardar datos en la base de datos. Con estos cambios, tu proyecto utilizará MongoDB como base de datos, y podrás realizar operaciones CRUD utilizando el paquete mongodb en tu aplicación backend.
+
+13. Para conectar el front con axios, primero debemos instalar la librería axios en nuestro proyecto de front. Podemos hacerlo a través de npm con el siguiente comando:
+```
+npm install axios
+```
+14. Debes crear la carpeta api dentro de la carpeta pages de tu proyecto Next.js. Luego, dentro de la carpeta api, debes crear un archivo con el nombre de la ruta que quieres crear, en este caso items.js. En ese archivo items.js debes definir las rutas y las funciones correspondientes para manejar las solicitudes HTTP GET, POST, PUT y DELETE. Puedes usar la librería axios para realizar las solicitudes HTTP desde el frontend. 
