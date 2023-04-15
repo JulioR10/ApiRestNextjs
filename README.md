@@ -108,6 +108,7 @@ npm install axios
 ```
 14. Debes crear la carpeta api dentro de la carpeta pages de tu proyecto Next.js. Luego, dentro de la carpeta api, debes crear un archivo con el nombre de la ruta que quieres crear, en este caso items.js. En ese archivo items.js debes definir las rutas y las funciones correspondientes para manejar las solicitudes HTTP GET, POST, PUT y DELETE. Puedes usar la librería axios para realizar las solicitudes HTTP desde el frontend. 
 15. Para iniciar la ejecucion:
+
 -En el back:
 ```
 npm start
