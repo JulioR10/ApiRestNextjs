@@ -27,22 +27,34 @@ connect();
 
 // Rutas
 app.get("/items", async (req, res) => {
-  const items = await collection.find({}).toArray();
+  const items = await collection.find().toArray();
+  console.log("GET");
   res.json(items);
 });
 
 app.get("/items/:id", async (req, res) => {
   const item = await collection.findOne({ _id: new ObjectId(req.params.id) });
+  console.log("GETBYID");
   res.json(item);
 });
 
 app.post("/items", async (req, res) => {
+  console.log("POST");
   try {
+    if (!req.body.name || !req.body.description) {
+      return res
+        .status(400)
+        .json({ message: "Both name and description are required" });
+    }
     const newItem = req.body;
     const result = await collection.insertOne(newItem);
-    if (result && result.ops && result.ops.length > 0) {
-      res.status(201).json(result.ops[0]);
+    console.log("Resultado de la inserción:", result);
+
+    if (result && result.acknowledged && result.insertedId) {
+      const insertedItem = { _id: result.insertedId, ...newItem };
+      res.status(201).json(insertedItem);
     } else {
+      console.log("Error al crear el elemento:", result);
       res.status(400).json({ message: "Error creating new item" });
     }
   } catch (error) {
@@ -52,6 +64,7 @@ app.post("/items", async (req, res) => {
 });
 
 app.put("/items/:id", async (req, res) => {
+  console.log("PUT");
   const updatedItem = req.body;
   const result = await collection.replaceOne(
     { _id: new ObjectId(req.params.id) },
@@ -61,6 +74,7 @@ app.put("/items/:id", async (req, res) => {
 });
 
 app.delete("/items/:id", async (req, res) => {
+  console.log("DELETE");
   const result = await collection.deleteOne({
     _id: new ObjectId(req.params.id),
   });

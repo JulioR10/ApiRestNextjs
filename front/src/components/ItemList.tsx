@@ -13,6 +13,38 @@ const ItemList = ({ items }: { items: any }) => (
 
 export default ItemList;
 
+// import React from "react";
+
+// const ItemList = ({ items, onUpdateItem, onDeleteItem }) => {
+//   const handleUpdate = (id: any, updatedItem: any) => {
+//     onUpdateItem(id, updatedItem);
+//   };
+
+//   const handleDelete = (id: any) => {
+//     onDeleteItem(id);
+//   };
+
+//   return (
+//     <ul>
+//       {items.map((item: any) => (
+//         <li key={item._id}>
+//           {item.name} - {item.description}
+//           <button
+//             onClick={() =>
+//               handleUpdate(item._id, { ...item, name: "Nuevo nombre" })
+//             }
+//           >
+//             Actualizar
+//           </button>
+//           <button onClick={() => handleDelete(item._id)}>Eliminar</button>
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// };
+
+// export default ItemList;
+
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
 
