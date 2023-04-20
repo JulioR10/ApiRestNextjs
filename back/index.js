@@ -6,7 +6,7 @@ app.use(express.json());
 
 // Conexión a la base de datos
 const uri =
-  "mongodb+srv://JulioRD:Julio@cluster0.xqzvr.mongodb.net/Parafront?retryWrites=true&w=majority";
+  "mongodb+srv://<User>:<Pass>@cluster0.xqzvr.mongodb.net/<DBName>?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
